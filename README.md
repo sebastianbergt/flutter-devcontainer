@@ -9,7 +9,7 @@ the [VS Remote - Containers](https://code.visualstudio.com/docs/remote/container
 extension. 
 
 Usage: 
-* Clone this repository `git clone https://github.com/MFAshby/flutter-devcontainer.git`
+* Clone this repository `git clone https://github.com/sebastianbergt/flutter-devcontainer.git`
 * Open it in VS Code `cd flutter-devcontainer; code .`
 * Click 'Re-open in container' when prompted
 * Wait for downloads to complete (this can take a while, it downloads java, android SDK
