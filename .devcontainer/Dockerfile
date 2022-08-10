@@ -1,11 +1,7 @@
-FROM debian:stretch-slim
+FROM ubuntu:20.04
 
-# Hack to get openjdk to install in a container
-RUN mkdir -p /usr/share/man/man1 \
-    && mkdir -p /usr/share/man/man7
-
-# Apt
-RUN apt update && apt install -y curl wget git xz-utils lib32stdc++6 unzip openjdk-8-jdk-headless
+RUN DEBIAN_FRONTEND=noninteractive apt update && apt install -y --no-install-recommends tzdata
+RUN DEBIAN_FRONTEND=noninteractive apt install -y bash wget curl file git unzip xz-utils zip openjdk-8-jre-headless
 
 # Android SDK
 RUN wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip 
@@ -16,15 +12,19 @@ ENV PATH="/android-sdk/tools/bin:/android-sdk/build-tools:/android-sdk/platform-
 
 # SDK manager
 RUN yes | sdkmanager --licenses
-RUN sdkmanager "platforms;android-28" "platform-tools" "build-tools;28.0.3"
+RUN sdkmanager "platforms;android-29" "platform-tools" "build-tools;29.0.3"
 
 # Flutter
-RUN wget https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_v1.5.4-hotfix.2-stable.tar.xz
-RUN tar xf flutter_linux_v1.5.4-hotfix.2-stable.tar.xz 
-RUN rm flutter_linux_v1.5.4-hotfix.2-stable.tar.xz
+RUN wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.0.5-stable.tar.xz
+RUN tar xf flutter_linux_3.0.5-stable.tar.xz
+RUN rm flutter_linux_3.0.5-stable.tar.xz
 ENV PATH="/flutter/bin:${PATH}"
 
+# counter issue: fatal: detected dubious ownership in repository at '/flutter'
+RUN git config --global --add safe.directory /flutter
+
 RUN flutter config --no-analytics
+RUN flutter precache
 
 # Set a useful default shell
 ENV SHELL /bin/bash
